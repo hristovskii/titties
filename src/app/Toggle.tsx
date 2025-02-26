@@ -22,8 +22,11 @@ export default function TextToSpeechToggle() {
     (e: MouseEvent) => {
       if (!isEnabled || !utterance) return;
 
-      const clickedElement = e.target as HTMLElement;
-      const textToRead = clickedElement.textContent || "";
+      const target = e.target as HTMLElement;
+      if (!target || !(target instanceof HTMLElement)) return;
+
+      const textToRead = target.textContent || target.innerText;
+      if (textToRead.trim().length <= 0) throw new Error("Text is empty");
 
       speechSynthesis.cancel();
       utterance.text = textToRead;
